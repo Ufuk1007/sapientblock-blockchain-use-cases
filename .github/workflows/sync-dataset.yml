@@ -1,0 +1,68 @@
+name: Sync dataset and create a release
+
+on:
+  schedule:
+    - cron: "17 4 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Download the canonical public export
+        run: |
+          curl --fail --location --retry 3 \
+            https://huggingface.co/datasets/TooKeen/sapientblock-blockchain-use-cases/resolve/main/use_cases.jsonl \
+            --output use_cases.jsonl
+          curl --fail --location --retry 3 \
+            https://huggingface.co/datasets/TooKeen/sapientblock-blockchain-use-cases/resolve/main/export-metadata.json \
+            --output export-metadata.json
+          curl --fail --location --retry 3 \
+            https://huggingface.co/datasets/TooKeen/sapientblock-blockchain-use-cases/resolve/main/README.md \
+            --output HUGGINGFACE_DATASET_CARD.md
+
+      - name: Validate the export
+        run: |
+          node - <<'NODE'
+          const fs = require("node:fs");
+          const rows = fs.readFileSync("use_cases.jsonl", "utf8").trim().split("\n").map(JSON.parse);
+          const metadata = JSON.parse(fs.readFileSync("export-metadata.json", "utf8"));
+          if (rows.length !== metadata.record_count || rows.length === 0) {
+            throw new Error(`Invalid export: ${rows.length} rows, metadata says ${metadata.record_count}`);
+          }
+          if (rows.some((row) => !row.title_de || !row.title_en || !row.reviewed_at)) {
+            throw new Error("Export contains incomplete bilingual or unreviewed records");
+          }
+          if (rows.some((row) => row.source_name !== "SapientBlock" || !row.source_url || !row.required_attribution)) {
+            throw new Error("Export contains records without mandatory SapientBlock attribution");
+          }
+          console.log(`Validated ${rows.length} bilingual, reviewed records.`);
+          NODE
+
+      - name: Commit and release changed data
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          if git diff --quiet -- use_cases.jsonl export-metadata.json HUGGINGFACE_DATASET_CARD.md; then
+            echo "Dataset is already current."
+            exit 0
+          fi
+
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add use_cases.jsonl export-metadata.json HUGGINGFACE_DATASET_CARD.md
+          git commit -m "data: sync canonical dataset"
+          git push
+
+          tag="v$(date -u +%Y.%m.%d)"
+          if git rev-parse "$tag" >/dev/null 2>&1; then
+            tag="${tag}.${GITHUB_RUN_NUMBER}"
+          fi
+          gh release create "$tag" \
+            --title "SapientBlock dataset $(date -u +%Y-%m-%d)" \
+            --notes "Automated release of the current bilingual SapientBlock blockchain use case dataset."

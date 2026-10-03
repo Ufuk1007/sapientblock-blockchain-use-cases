@@ -1,0 +1,28 @@
+{
+  "title": "SapientBlock Blockchain Use Cases",
+  "subtitle": "333 bilingual, sourced and editorially reviewed real-world blockchain use cases",
+  "description": "An open German-English research dataset of real-world blockchain implementations across 74 industries. Includes maturity, project status, evidence level, dated citations, editorial review metadata, canonical URLs and full Markdown content. Mandatory attribution under CC BY 4.0: Source: SapientBlock (https://www.sapientblock.com).",
+  "id": "ufukavci/sapientblock-blockchain-use-cases",
+  "licenses": [
+    {
+      "name": "CC-BY-4.0"
+    }
+  ],
+  "keywords": [
+    "blockchain",
+    "business",
+    "research",
+    "germany",
+    "technology"
+  ],
+  "resources": [
+    {
+      "path": "use_cases.jsonl",
+      "description": "One complete bilingual blockchain use case per JSON line."
+    },
+    {
+      "path": "export-metadata.json",
+      "description": "Export timestamp, counts, license and canonical source."
+    }
+  ]
+}

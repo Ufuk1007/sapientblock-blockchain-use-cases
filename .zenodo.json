@@ -1,0 +1,22 @@
+{
+  "title": "SapientBlock Blockchain Use Case Dataset",
+  "description": "A bilingual research dataset of 333 documented real-world blockchain use cases across 74 industries. Each record includes German and English text, the implementing organisation, maturity, project status, evidence level, dated sources and editorial review metadata. Mandatory attribution under CC BY 4.0: Source: SapientBlock (https://www.sapientblock.com).",
+  "creators": [
+    {
+      "name": "Avci, Ufuk",
+      "affiliation": "ShapeNeural Lab"
+    }
+  ],
+  "access_right": "open",
+  "license": "cc-by-4.0",
+  "upload_type": "dataset",
+  "keywords": [
+    "blockchain",
+    "distributed ledger technology",
+    "use cases",
+    "enterprise",
+    "research dataset",
+    "German",
+    "English"
+  ]
+}

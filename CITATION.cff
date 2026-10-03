@@ -1,0 +1,25 @@
+cff-version: 1.2.0
+message: "If you use this dataset, please cite it using the metadata below."
+type: dataset
+title: "SapientBlock Blockchain Use Case Dataset"
+abstract: >-
+  A bilingual dataset of 333 documented real-world blockchain use cases
+  across 74 industries, including maturity, project status, evidence level,
+  dated sources, editorial review metadata and full German and English text.
+authors:
+  - family-names: "Avci"
+    given-names: "Ufuk"
+    affiliation: "ShapeNeural Lab"
+version: 1.0.0
+date-released: 2026-10-03
+license: CC-BY-4.0
+repository-code: "https://github.com/Ufuk1007/sapientblock-blockchain-use-cases"
+url: "https://www.sapientblock.com/blockchain-use-case-datenbank"
+keywords:
+  - blockchain
+  - distributed ledger technology
+  - use cases
+  - enterprise
+  - research dataset
+  - German
+  - English
